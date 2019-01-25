@@ -15,7 +15,7 @@ public class MyConnection {
     }
 
     public Connection getConnection() {
-        LOGGER.info("***** MySQL JDBC Connection Testing *****");
+        LOGGER.info("MySQL JDBC Connection Testing");
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();

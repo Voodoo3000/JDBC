@@ -15,7 +15,5 @@ public class App {
         car.setValue(2.5);
 
         carDao.add(car);
-
-        System.out.println(carDao.getAll());
     }
 }

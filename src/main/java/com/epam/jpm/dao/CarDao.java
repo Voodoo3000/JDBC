@@ -15,6 +15,9 @@ public class CarDao {
     private static final Logger LOGGER = Logger.getLogger(CarDao.class);
     private MyConnection connection = MyConnection.getInstance();
 
+    /*
+    * Gets list of all cars are stored in DB
+    */
     public List<Car> getAll() {
         List<Car> cars = new ArrayList<>();
         String sql = "SELECT ID, MANUFACTURER, MODEL, COLOR, TRANSMISSION, YEAR, VALUE FROM car";
@@ -35,12 +38,15 @@ public class CarDao {
             stmt.close();
             rs.close();
             connection.getConnection().close();
-        }  catch (SQLException e ) {
+        } catch (SQLException e) {
             LOGGER.error("Get all cars SQLException", e);
         }
         return cars;
     }
 
+    /*
+    * Add new car to DB
+    */
     public void add(Car car) {
         String sql = "INSERT INTO car(MANUFACTURER, MODEL, COLOR, TRANSMISSION, YEAR, VALUE) VALUES(?, ?, ?, ?, ?, ?)";
         try {
@@ -59,3 +65,4 @@ public class CarDao {
         }
     }
 }
+
