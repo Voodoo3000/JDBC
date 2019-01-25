@@ -3,7 +3,9 @@ package com.epam.jpm;
 import com.epam.jpm.dao.*;
 import com.epam.jpm.entity.Friendship;
 
+import com.epam.jpm.entity.Like;
 import com.epam.jpm.entity.Post;
+import com.epam.jpm.entity.User;
 import com.epam.jpm.util.RandomGenerator;
 import org.apache.log4j.Logger;
 
@@ -21,7 +23,10 @@ public class App {
         Dao postDao = new PostDao();
         Dao likeDao = new LikeDao();
 
-        /*for (int i = 0; i < 500; i++) {
+      /*  *//*
+        * Initiates user generating.
+        *//*
+        for (int i = 0; i < 500; i++) {
             User user = new User();
             user.setFirstName("Name" + i);
             user.setLastName("Surname" + i);
@@ -29,7 +34,10 @@ public class App {
             userDao.add(user);
         }*/
 
-       /* for (int i = 0; i < 7000; i++) {
+      /*  *//*
+        * Initiates user friendship generating and provides test for repeating friendship.
+        *//*
+        for (int i = 0; i < 7000; i++) {
             Friendship friendship = new Friendship();
             friendship.setUserId1(userDao.getById(generator.randBetween(2776, 3025)).getId());
             friendship.setUserId2(userDao.getById(generator.randBetween(3026, 3275)).getId());
@@ -47,7 +55,10 @@ public class App {
             friendshipDao.add(friendship);
         }*/
 
-        /*for (int i = 0; i < 1001; i++) {
+       /* *//*
+        * Initiates post generating.
+        *//*
+        for (int i = 0; i < 1001; i++) {
             Post post = new Post();
             post.setUserId(userDao.getById(generator.randBetween(2776, 3275)).getId());
             post.setText("Post text" + i);
@@ -55,7 +66,11 @@ public class App {
             postDao.add(post);
         }*/
 
-        /*for (int i = 0; i < 20000; i++) {
+        /*
+        * Initiates likes generating and performs test to avoid likes repeating and
+        * liking your own post.
+        *//*
+        for (int i = 0; i < 20000; i++) {
             Like like = new Like();
             Post post = (Post) postDao.getById(generator.randBetween(1, 1001));
             like.setUserId(userDao.getById(generator.randBetween(2776, 3275)).getId());
@@ -79,11 +94,18 @@ public class App {
             likeDao.add(like);
         }*/
 
+        /*
+        * Timestamp announcing
+        */
         Date timestamp = new Date(2020 - 1900, 5 - 1, 1);
+
         List<Friendship> friendships = friendshipDao.getAll();
         Map<Integer, List<Integer>> friendshipMap = new HashMap<>();
         List<Integer> friendIds;
 
+        /*
+        * Gets all user ids and their friendship ids
+        */
         for (Friendship friendship : friendships) {
             friendIds = ((FriendshipDao) friendshipDao).getAllFriendshipsMultipleParams( "USER_ID2","USER_ID1", friendship.getUserId1(), timestamp);
             friendshipMap.put(friendship.getUserId1(), friendIds);
@@ -91,6 +113,9 @@ public class App {
             friendshipMap.put(friendship.getUserId2(), friendIds);
         }
 
+        /*
+        * Takes user id who has more than 20 friends
+        */
         for(Map.Entry<Integer, List<Integer>> integerListEntry : friendshipMap.entrySet()) {
             if(integerListEntry.getValue().size() >= 20) {
                 LOGGER.info("User id: " + integerListEntry.getKey() + " has " + integerListEntry.getValue().size() + " friends");
@@ -98,7 +123,9 @@ public class App {
             }
         }
 
-        //Set<Integer> usersWhoHasLikes = new TreeSet<>();
+        /*
+        * Takes user id and their post id if they have more than 25 likes
+        */
         for(int i : ((LikeDao) likeDao).getLikedPostIdsByLikesQuantity(20)) {
             Post post = (Post) postDao.getById(i);
             if(friendshipMap.containsKey(post.getUserId()) && friendshipMap.get(post.getUserId()).size() >= 15) {

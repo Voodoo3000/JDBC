@@ -2,7 +2,6 @@ package com.epam.jpm.dao;
 
 import com.epam.jpm.connection.ConnectionPool;
 import com.epam.jpm.entity.Like;
-import com.epam.jpm.entity.Post;
 import org.apache.log4j.Logger;
 
 import java.sql.*;

@@ -45,11 +45,7 @@ public class UserDao implements Dao<User> {
             PreparedStatement preparedStatement = collection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getInt("ID"));
-                user.setFirstName(resultSet.getString("FIRSTNAME"));
-                user.setLastName(resultSet.getString("LASTNAME"));
-                user.setBirthday(resultSet.getDate("BIRTHDATE"));
+                User user = getUser(resultSet);
                 users.add(user);
             }
             preparedStatement.close();
@@ -73,11 +69,7 @@ public class UserDao implements Dao<User> {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt("ID"));
-                user.setFirstName(resultSet.getString("FIRSTNAME"));
-                user.setLastName(resultSet.getString("LASTNAME"));
-                user.setBirthday(resultSet.getDate("BIRTHDATE"));
+                user = getUser(resultSet);
             }
             preparedStatement.close();
         } catch (SQLException e) {
@@ -98,5 +90,14 @@ public class UserDao implements Dao<User> {
     @Override
     public void remove(User entity) {
 
+    }
+
+    private User getUser(ResultSet resultSet) throws SQLException {
+        User user = new User();
+        user.setId(resultSet.getInt("ID"));
+        user.setFirstName(resultSet.getString("FIRSTNAME"));
+        user.setLastName(resultSet.getString("LASTNAME"));
+        user.setBirthday(resultSet.getDate("BIRTHDATE"));
+        return user;
     }
 }

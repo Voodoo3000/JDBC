@@ -42,11 +42,7 @@ public class FriendshipDao implements Dao<Friendship> {
             PreparedStatement preparedStatement = collection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Friendship friendship = new Friendship();
-                friendship.setId(resultSet.getInt("ID"));
-                friendship.setUserId1(resultSet.getInt("USER_ID1"));
-                friendship.setUserId2(resultSet.getInt("USER_ID2"));
-                friendship.setTimestamp(resultSet.getDate("TIMESTAMP"));
+                Friendship friendship = getFriendship(resultSet);
                 friendships.add(friendship);
             }
             preparedStatement.close();
@@ -59,6 +55,7 @@ public class FriendshipDao implements Dao<Friendship> {
         }
         return friendships;
     }
+
 
     @Override
     public Friendship getById(int id) {
@@ -75,11 +72,7 @@ public class FriendshipDao implements Dao<Friendship> {
             preparedStatement.setInt(2, userId2);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                friendship = new Friendship();
-                friendship.setId(resultSet.getInt("ID"));
-                friendship.setUserId1(resultSet.getInt("USER_ID1"));
-                friendship.setUserId2(resultSet.getInt("USER_ID2"));
-                friendship.setTimestamp(resultSet.getDate("TIMESTAMP"));
+                friendship = getFriendship(resultSet);
             }
             preparedStatement.close();
         } catch (SQLException e) {
@@ -122,5 +115,14 @@ public class FriendshipDao implements Dao<Friendship> {
     @Override
     public void remove(Friendship entity) {
 
+    }
+
+    private Friendship getFriendship(ResultSet resultSet) throws SQLException {
+        Friendship friendship = new Friendship();
+        friendship.setId(resultSet.getInt("ID"));
+        friendship.setUserId1(resultSet.getInt("USER_ID1"));
+        friendship.setUserId2(resultSet.getInt("USER_ID2"));
+        friendship.setTimestamp(resultSet.getDate("TIMESTAMP"));
+        return friendship;
     }
 }
