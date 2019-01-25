@@ -1,21 +1,35 @@
 package com.epam.jpm;
 
-import com.epam.jpm.dao.CarDao;
-import com.epam.jpm.entity.Car;
+import com.epam.jpm.data.MetadataProvider;
+import com.epam.jpm.generator.RandomGenerator;
+import com.epam.jpm.generator.RowGenerator;
+import com.epam.jpm.generator.TableGenerator;
+import org.apache.log4j.Logger;
 
 public class App {
+    private static final Logger LOGGER = Logger.getLogger(App.class);
+
     public static void main(String[] args) {
-        CarDao carDao = new CarDao();
-        Car car = new Car();
-        car.setManufacturer("Toyota");
-        car.setModel("Chaser");
-        car.setColor("Green");
-        car.setTransmission(Car.Transmission.AT);
-        car.setYear(1999);
-        car.setValue(2.5);
+        RandomGenerator randomGenerator = new RandomGenerator();
+        TableGenerator tableGenerator = new TableGenerator();
+        RowGenerator rowGenerator = new RowGenerator();
+        MetadataProvider provider = new MetadataProvider();
 
-        carDao.add(car);
+        /*
+        * Initiates creating random tables
+        */
+        for(int num : randomGenerator.getSetOfRandomNumbers(10,1, 50)) {
+            tableGenerator.createRandomTable(num, randomGenerator.columnGenerator(5, 15));
+        }
 
-        System.out.println(carDao.getAll());
+        LOGGER.info(provider.getTableNames());
+        for (String tableName : provider.getTableNames()){
+            LOGGER.info(provider.getTableColumnMetadataMap(tableName));
+        }
+
+        /*
+        * Initiates creating random rows
+        */
+        rowGenerator.createRandomRowsInTables();
     }
 }
