@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 
 public class App {
     private static final Logger LOGGER = Logger.getLogger(App.class);
+    private static final int MIN_COLUMN_QUANTITY = 5;
+    private static final int MAX_COLUMN_QUANTITY = 15;
 
     public static void main(String[] args) {
         RandomGenerator randomGenerator = new RandomGenerator();
@@ -19,7 +21,7 @@ public class App {
         * Initiates creating random tables
         */
         for(int num : randomGenerator.getSetOfRandomNumbers(10,1, 50)) {
-            tableGenerator.createRandomTable(num, randomGenerator.columnGenerator(5, 15));
+            tableGenerator.createRandomTable(num, randomGenerator.columnGenerator(MIN_COLUMN_QUANTITY, MAX_COLUMN_QUANTITY));
         }
 
         LOGGER.info(provider.getTableNames());

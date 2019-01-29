@@ -38,10 +38,10 @@ public class RandomGenerator {
     /*
     * Provides with random size set of random and unique numbers
     */
-    public Set<Integer> getSetOfRandomNumbers(int tableQuantity, int start, int end) {
+    public Set<Integer> getSetOfRandomNumbers(int tableQuantity, int startTableNumber, int endTableNumber) {
         Set<Integer> setOfNumbers = new TreeSet<>();
         while(setOfNumbers.size() < tableQuantity) {
-            setOfNumbers.add(randBetween(start, end));
+            setOfNumbers.add(randBetween(startTableNumber, endTableNumber));
         }
         return setOfNumbers;
     }

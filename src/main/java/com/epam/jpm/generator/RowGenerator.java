@@ -11,6 +11,14 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class RowGenerator {
+    private static final String VARCHAR_VALUE = "DATA_BASE_STRESS_TEST";
+    private static final int INT_VALUE = 9;
+    private static final double DOUBLE_VALUE = 3.14;
+    private static final boolean BOOLEAN_VALUE = true;
+
+    private static final int MIN_ROW_QUANTITY = 10;
+    private static final int MAX_ROW_QUANTITY = 20;
+
     private static final Logger LOGGER = Logger.getLogger(RowGenerator.class);
     private ConnectionPool pool = ConnectionPool.getInstance();
     private RandomGenerator randomGenerator = new RandomGenerator();
@@ -25,7 +33,7 @@ public class RowGenerator {
     public void createRandomRowsInTables() {
         int[] tableRowsArray = new int[provider.getTableNames().size()];
         for (String tableName : provider.getTableNames()) {
-            tableRowsArray[provider.getTableNames().indexOf(tableName)] = randomGenerator.randBetween(10, 20);
+            tableRowsArray[provider.getTableNames().indexOf(tableName)] = randomGenerator.randBetween(MIN_ROW_QUANTITY, MAX_ROW_QUANTITY);
             LOGGER.info(tableRowsArray[provider.getTableNames().indexOf(tableName)]);
             for (int i = 0; i < tableRowsArray[provider.getTableNames().indexOf(tableName)]; i++) {
                 fillAndUpdateRowSql(tableName);
@@ -50,16 +58,16 @@ public class RowGenerator {
                 i++;
                 switch (ValueType.valueOf(tableColumnMetadata.get(columnName))) {
                     case VARCHAR:
-                        preparedStatement.setString(i, "DATA_BASE_STRESS_TEST");
+                        preparedStatement.setString(i, VARCHAR_VALUE);
                         break;
                     case INT:
-                        preparedStatement.setInt(i, 9);
+                        preparedStatement.setInt(i, INT_VALUE);
                         break;
                     case DOUBLE:
-                        preparedStatement.setDouble(i, 3.14);
+                        preparedStatement.setDouble(i, DOUBLE_VALUE);
                         break;
                     case BOOLEAN:
-                        preparedStatement.setBoolean(i, true);
+                        preparedStatement.setBoolean(i, BOOLEAN_VALUE);
                         break;
                 }
             }
