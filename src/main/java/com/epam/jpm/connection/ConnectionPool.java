@@ -34,7 +34,7 @@ public class ConnectionPool {
             try {
                 String userName = "root";
                 String password = "root";
-                String url = "jdbc:MySQL://localhost/jmp_db";
+                String url = "jdbc:MySQL://localhost/jdbc_backup";
                 connection = DriverManager.getConnection(url, userName, password);
             } catch (SQLException e) {
                 LOGGER.error("SQLException in initializeConnectionPool", e);

@@ -7,10 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class MetadataProvider {
     private static final Logger LOGGER = Logger.getLogger(MetadataProvider.class);
@@ -46,13 +43,13 @@ public class MetadataProvider {
     */
     public Map<String, String> getTableColumnMetadataMap(String tableName) {
         Connection collection = pool.getConnection();
-        Map<String, String> tableColumnMetadata = new TreeMap<>();
-        String sql = "SHOW COLUMNS FROM " + tableName;
+        Map<String, String> tableColumnMetadata = new LinkedHashMap<>();
+        String sql = "SHOW COLUMNS FROM jmp_db." + tableName;
         try {
             PreparedStatement preparedStatement = collection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                tableColumnMetadata.put(resultSet.getString("Field"), columnTypeConverter(resultSet.getString("Type")));
+                tableColumnMetadata.put(resultSet.getString("Field"), resultSet.getString("Type"));
             }
             resultSet.close();
             preparedStatement.close();
@@ -65,27 +62,5 @@ public class MetadataProvider {
         }
         tableColumnMetadata.remove("ID");
         return tableColumnMetadata;
-    }
-
-    /*
-    * Converts column metadata types to appropriate ValueType
-    */
-    private String columnTypeConverter(String metaDataColumnType) {
-        String columnType = null;
-        switch (metaDataColumnType) {
-            case "varchar(255)":
-                columnType = String.valueOf(ValueType.VARCHAR);
-                break;
-            case "int(11)":
-                columnType = String.valueOf(ValueType.INT);
-                break;
-            case "double":
-                columnType = String.valueOf(ValueType.DOUBLE);
-                break;
-            case "tinyint(1)":
-                columnType = String.valueOf(ValueType.BOOLEAN);
-                break;
-        }
-        return columnType;
     }
 }
